@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\WordPress;
+namespace App\WordPress\Console\Commands;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -8,14 +8,14 @@ use Symfony\Component\Console\Input\InputOption;
 class KeysMakeCommand extends AbstractMakeCommand
 {
     use EnvironmentTrait;
-    use \App\Services\WordPressService;
+    use \App\WordPress\Services\WordPressService;
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'make:keys';
+    protected $name = 'wordpress:keys';
 
     /**
      * The console command description.

@@ -72,19 +72,19 @@ class TemplateController extends Controller
             list($plugin, $plugin_directory) = $this->parsePluginPath($plugin_path);
 
             if ($plugin_directory) {
-                app('translator')->addNamespace($plugin, $plugin_directory.'/'.config('wordpress.plugins.lang.directory'));
+                app('translator')->addNamespace($plugin, $plugin_directory.'/'.addon()->config('wordpress.plugins.lang.directory'));
             }
         }
     }
 
     protected function themeBladeDirectory()
     {
-        return get_template_directory().'/'.config('wordpress.themes.blade.directory');
+        return get_template_directory().'/'.addon()->config('wordpress.themes.blade.directory');
     }
 
     protected function themeLangDirectory()
     {
-        return get_template_directory().'/'.config('wordpress.themes.lang.directory');
+        return get_template_directory().'/'.addon()->config('wordpress.themes.lang.directory');
     }
 
     protected function parsePluginPath($plugin_path)
@@ -182,10 +182,10 @@ class TemplateController extends Controller
         $filename = basename($php_path, '.php');
 
         // blade extension
-        $blade_path = $dirname.'/'.config('wordpress.themes.blade.directory').'/'.$filename.'.blade.php';
+        $blade_path = $dirname.'/'.addon()->config('wordpress.themes.blade.directory').'/'.$filename.'.blade.php';
         if (file_exists($blade_path)) {
-            if (config('wordpress.themes.blade.precompile')) {
-                $header_comment = config('wordpress.themes.blade.header_comment');
+            if (addon()->config('wordpress.themes.blade.precompile')) {
+                $header_comment = addon()->config('wordpress.themes.blade.header_comment');
                 $php_script_image = app('blade.expander')->expand($blade_path);
 
                 // Output php

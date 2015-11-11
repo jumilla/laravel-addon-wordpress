@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\WordPress;
+namespace App\WordPress\Console\Commands;
 
 use Illuminate\Console\Command;
 
@@ -75,8 +75,6 @@ class InstallCommand extends Command
 
     protected function gather()
     {
-        app()->configure('app');
-
         $config = [
             'language' => config('app.locale'),
             'backend_url' => env('WP_BACKENDURL'),

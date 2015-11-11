@@ -282,7 +282,7 @@ class BlogAdminController extends Controller
     {
         $path = app('request')->path();
 
-        $prefix = config('wordpress.url.backend_prefix');
+        $prefix = addon()->config('wordpress.url.backend_prefix');
 
         // trim prefix
         if (starts_with($path, $prefix)) {

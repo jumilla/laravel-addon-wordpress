@@ -8,13 +8,6 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 class RouteServiceProvider extends ServiceProvider
 {
     /**
-     * Routing group prefix.
-     *
-     * @var string
-     */
-    protected $prefix = 'blog';
-
-    /**
      * This namespace is applied to the controller routes in your routes file.
      *
      * In addition, it is set as the URL generator's root namespace.
@@ -42,8 +35,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(Router $router)
     {
-        $router->group(['prefix' => $this->prefix, 'namespace' => $this->namespace], function ($router) {
-            require __DIR__.'/../Http/routes.php';
+        $router->group(['prefix' => addon()->config('wordpress.url.backend_prefix'), 'namespace' => $this->namespace], function ($router) {
+            require __DIR__.'/../Http/backend-routes.php';
+        });
+
+        $router->group(['prefix' => addon()->config('wordpress.url.site_prefix'), 'namespace' => $this->namespace], function ($router) {
+            require __DIR__.'/../Http/site-routes.php';
         });
     }
 }

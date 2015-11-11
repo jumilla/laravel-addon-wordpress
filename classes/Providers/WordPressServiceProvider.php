@@ -25,8 +25,6 @@ class WordPressServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        app()->configure('wordpress');
-
         $this->setupBladeEnvironment($this->blade());
 
         app()->singleton('blade.expander', function () {

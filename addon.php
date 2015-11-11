@@ -1,5 +1,7 @@
 <?php
 
+use App\WordPress as Addon;
+
 return [
     'version' => 5,
     'namespace' => 'App\WordPress',
@@ -15,11 +17,22 @@ return [
         'views' => 'resources/views',
     ],
     'providers' => [
-        App\WordPress\Providers\AddonServiceProvider::class,
-        App\WordPress\Providers\RouteServiceProvider::class,
+        Addon\Providers\AddonServiceProvider::class,
+        Addon\Providers\RouteServiceProvider::class,
+        Addon\Providers\WordPressServiceProvider::class,
     ],
     'console' => [
         'commands' => [
+            Addon\Console\Commands\StatusCommand::class,
+            Addon\Console\Commands\InstallCommand::class,
+            Addon\Console\Commands\UninstallCommand::class,
+            Addon\Console\Commands\MultisiteInstallCommand::class,
+            Addon\Console\Commands\MultisiteUninstallCommand::class,
+            Addon\Console\Commands\ThemeListCommand::class,
+            Addon\Console\Commands\PluginListCommand::class,
+            Addon\Console\Commands\KeysMakeCommand::class,
+            Addon\Console\Commands\ThemeMakeCommand::class,
+            Addon\Console\Commands\PluginMakeCommand::class,
         ],
     ],
     'http' => [

@@ -56,7 +56,7 @@ trait WordPressService
             // no globals
         }
 
-        define('WP_CONTENT_URL', config('wordpress.url.site').'/wp-content');
+        define('WP_CONTENT_URL', addon()->config('wordpress.url.site').'/wp-content');
 
         require_once wordpress_path('wp-load.php');
 
@@ -78,7 +78,7 @@ trait WordPressService
             // no globals
         }
 
-        define('WP_CONTENT_URL', config('wordpress.url.site').'/wp-content');
+        define('WP_CONTENT_URL', addon()->config('wordpress.url.site').'/wp-content');
 
         require_once wordpress_path('wp-load.php');
 

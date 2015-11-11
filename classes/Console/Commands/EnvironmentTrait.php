@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\WordPress;
+namespace App\WordPress\Console\Commands;
 
 trait EnvironmentTrait
 {

@@ -2,9 +2,6 @@
 
 use App\WordPress\Services\WordPress;
 
-$wp_backend_prefix = config('wordpress.url.backend_prefix');
-$wp_site_prefix = config('wordpress.url.site_prefix');
-
 if (!function_exists('add_backend_file_download_routes')) {
     function add_backend_file_download_routes($router)
     {
@@ -21,36 +18,19 @@ if (!function_exists('add_backend_file_download_routes')) {
     }
 }
 
-if (!function_exists('add_site_file_download_routes')) {
-    function add_site_file_download_routes($router)
-    {
-        $action = 'FileProvideController@downloadOnSite';
-
-        $router->get('{f1}', $action);
-        $router->get('{f1}/{f2}', $action);
-        $router->get('{f1}/{f2}/{f3}', $action);
-        $router->get('{f1}/{f2}/{f3}/{f4}', $action);
-        $router->get('{f1}/{f2}/{f3}/{f4}/{f5}', $action);
-        $router->get('{f1}/{f2}/{f3}/{f4}/{f5}/{f6}', $action);
-        $router->get('{f1}/{f2}/{f3}/{f4}/{f5}/{f6}/{f7}', $action);
-        $router->get('{f1}/{f2}/{f3}/{f4}/{f5}/{f6}/{f7}/{f8}', $action);
-        $router->get('{f1}/{f2}/{f3}/{f4}/{f5}/{f6}/{f7}/{f8}/{f9}', $action);
-    }
-}
-
 // Login Gate
-$router->group(['prefix' => $wp_backend_prefix], function ($router) {
+$router->group(['prefix' => ''], function ($router) {
     // ?action = ['postpass', 'logout', logout', 'lostpassword', 'retrievepassword', 'resetpass', 'rp', 'register']
     $router->get('wp-login.php', 'GateController@login');
     $router->post('wp-login.php', 'GateController@login');
 });
 
 // Shortcuts
-$router->group(['prefix' => $wp_backend_prefix], function ($router) {
-    $admin_url = config('wordpress.url.backend').'/wp-admin/';
+$router->group(['prefix' => ''], function ($router) {
+    $admin_url = addon()->config('wordpress.url.backend').'/wp-admin/';
 
     // WordPress+ original routing
-    if (config('wordpress.url.backend') != config('wordpress.url.site')) {
+    if (addon()->config('wordpress.url.backend') != addon()->config('wordpress.url.site')) {
         $router->get('', function () use ($admin_url) { return redirect()->to($admin_url); });
     }
 
@@ -61,7 +41,7 @@ $router->group(['prefix' => $wp_backend_prefix], function ($router) {
 });
 
 // /wp-admin/network
-$router->group(['prefix' => $wp_backend_prefix.'wp-admin/network'], function ($router) {
+$router->group(['prefix' => 'wp-admin/network'], function ($router) {
     $router->get('', 'SiteAdminController@siteDashboard');
     foreach (WordPress::siteAdminScripts() as $script) {
         $router->get($script, 'SiteAdminController@sitePage');
@@ -70,7 +50,7 @@ $router->group(['prefix' => $wp_backend_prefix.'wp-admin/network'], function ($r
 });
 
 // /wp-admin
-$router->group(['prefix' => $wp_backend_prefix.'wp-admin'], function ($router) {
+$router->group(['prefix' => 'wp-admin'], function ($router) {
     //--- Dashboard ---//
 
     $router->get('', ['as' => 'wordpress.admin.dashboard', 'uses' => 'BlogAdminController@dashboard']);
@@ -202,7 +182,7 @@ $router->group(['prefix' => $wp_backend_prefix.'wp-admin'], function ($router) {
 });
 
 // /wp-includes for backend
-$router->group(['prefix' => $wp_backend_prefix.'wp-includes'], function ($router) {
+$router->group(['prefix' => 'wp-includes'], function ($router) {
     // irregular
     $router->get('js/tinymce/wp-mce-help.php', 'BlogAdminController@runPhpScript');
     $router->get('js/tinymce/wp-tinymce.php', 'BlogAdminController@runPhpScript');
@@ -212,25 +192,13 @@ $router->group(['prefix' => $wp_backend_prefix.'wp-includes'], function ($router
 });
 
 // /wp-content for backend
-$router->group(['prefix' => $wp_backend_prefix.'wp-content'], function ($router) {
+$router->group(['prefix' => 'wp-content'], function ($router) {
     // provide files, about css, js, png, ...others.
     add_backend_file_download_routes($router);
 });
 
-// /wp-includes for site
-// MEMO: theme 'twentyfifteen' using...
-$router->group(['prefix' => $wp_site_prefix.'wp-includes'], function ($router) {
-    add_site_file_download_routes($router);
-});
-
-// /wp-content for site
-$router->group(['prefix' => $wp_site_prefix.'wp-content'], function ($router) {
-    // provide files, about css, js, png, ...others.
-    add_site_file_download_routes($router);
-});
-
 // Users
-$router->group(['prefix' => $wp_backend_prefix], function ($router) {
+$router->group(['prefix' => ''], function ($router) {
     $router->get('wp-signup.php', 'UserController@signup');
     $router->post('wp-signup.php', 'UserController@signup');
     $router->get('wp-activate.php', 'UserController@activate');
@@ -239,10 +207,7 @@ $router->group(['prefix' => $wp_backend_prefix], function ($router) {
 });
 
 // Collaborations
-$router->group(['prefix' => $wp_backend_prefix], function ($router) {
-    //--- Site information ---//
-//		$router->get('?feed=rss2', 'TemplateController@provide');
-//		$router->get('?feed=comments-rss2', 'TemplateController@provide');
+$router->group(['prefix' => ''], function ($router) {
     $router->get('wp-links-opml.php', 'CollaborationController@opml');
 
     $router->get('wp-mail.php', 'CollaborationController@mail');
@@ -252,30 +217,4 @@ $router->group(['prefix' => $wp_backend_prefix], function ($router) {
     $router->post('xmlrpc.php', 'CollaborationController@xmlrpc');
     $router->get('wp-cron.php', 'CollaborationController@cron');
     $router->post('wp-cron.php', 'CollaborationController@cron');
-});
-
-// Templates
-$router->group(['prefix' => $wp_site_prefix], function ($router) {
-    $action = 'TemplateController@provide';
-
-    $router->get('', $action);
-    $router->post('', $action);
-    $router->get('{p1}', $action);
-    $router->post('{p1}', $action);
-    $router->get('{p1}/{p2}', $action);
-    $router->post('{p1}/{p2}', $action);
-    $router->get('{p1}/{p2}/{p3}', $action);
-    $router->post('{p1}/{p2}/{p3}', $action);
-    $router->get('{p1}/{p2}/{p3}/{p4}', $action);
-    $router->post('{p1}/{p2}/{p3}/{p4}', $action);
-    $router->get('{p1}/{p2}/{p3}/{p4}/{p5}', $action);
-    $router->post('{p1}/{p2}/{p3}/{p4}/{p5}', $action);
-    $router->get('{p1}/{p2}/{p3}/{p4}/{p5}/{p6}', $action);
-    $router->post('{p1}/{p2}/{p3}/{p4}/{p5}/{p6}', $action);
-    $router->get('{p1}/{p2}/{p3}/{p4}/{p5}/{p6}/{p7}', $action);
-    $router->post('{p1}/{p2}/{p3}/{p4}/{p5}/{p6}/{p7}', $action);
-    $router->get('{p1}/{p2}/{p3}/{p4}/{p5}/{p6}/{p7}/{p8}', $action);
-    $router->post('{p1}/{p2}/{p3}/{p4}/{p5}/{p6}/{p7}/{p8}', $action);
-    $router->get('{p1}/{p2}/{p3}/{p4}/{p5}/{p6}/{p7}/{p8}/{p9}', $action);
-    $router->post('{p1}/{p2}/{p3}/{p4}/{p5}/{p6}/{p7}/{p8}/{p9}', $action);
 });

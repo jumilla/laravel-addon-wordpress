@@ -22,7 +22,7 @@ class AddonServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->setupPublishFiles();
+//        $this->setupPublishFiles();
     }
 
     /**
@@ -32,8 +32,8 @@ class AddonServiceProvider extends ServiceProvider
      */
     protected function setupPublishFiles()
     {
-        $this->publishes([
-            addon_path(addon_name(), 'database') => base_path('database'),
-        ]);
+        // $this->publishes([
+        //     addon_path(addon_name(), 'database') => base_path('database'),
+        // ]);
     }
 }

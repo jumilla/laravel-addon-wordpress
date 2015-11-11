@@ -11,12 +11,12 @@ class FileProvideController extends Controller
 {
     public function downloadOnBackend(Request $request)
     {
-        return $this->download($request, config('wordpress.url.backend_prefix'));
+        return $this->download($request, addon()->config('wordpress.url.backend_prefix'));
     }
 
     public function downloadOnSite(Request $request)
     {
-        return $this->download($request, config('wordpress.url.site_prefix'));
+        return $this->download($request, addon()->config('wordpress.url.site_prefix'));
     }
 
     protected function download(Request $request, $prefix, $attachment = false)

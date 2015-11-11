@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands\WordPress;
+namespace App\WordPress\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;
