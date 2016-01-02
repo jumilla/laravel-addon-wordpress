@@ -2,12 +2,17 @@
 
 namespace App\WordPress\Http\Controllers;
 
-use App\Http\Controllers\Controller as AppController;
+use Illuminate\Routing\Controller as BaseController;
 
 /**
  *
  */
-abstract class Controller extends AppController
+abstract class Controller extends BaseController
 {
     use \App\WordPress\Services\WordPressService;
+
+    public function __construct()
+    {
+        View::share('__addon', addon());
+    }
 }
